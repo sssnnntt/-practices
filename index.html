@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>{{.Title}}</title>
+</head>
+<body>
+<div class="container">
+    <h1>Сокращение ссылок</h1>
+    <div class="url-input">
+        <label for="original-url">Введите вашу ссылку:</label>
+        <input type="text" id="original-url" placeholder="https://example.com">
+        <button type="button" onclick="shortenUrl()">Сократить</button>
+    </div>
+    <div class="result" id="result-container">
+        <p id="shortened-url"></p>
+    </div>
+
+    <script>
+        function shortenUrl() {
+            const originalURL = document.getElementById('original-url').value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/shorten', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const resultContainer = document.getElementById('result-container');
+                    const shortenedUrlContainer = document.getElementById('shortened-url');
+
+                    shortenedUrlContainer.innerHTML = 'Сокращенная ссылка: <a href="' + xhr.responseText + '" target="_blank">' + xhr.responseText + '</a>';
+                    resultContainer.style.display = 'block';
+                }
+            };
+            xhr.send('url=' + originalURL);
+        }
+    </script>
+
+</div>
+</body>
+</html>
